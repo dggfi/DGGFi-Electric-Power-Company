@@ -24,15 +24,24 @@ namespace IngameScript
     {
         public class DGGFiAccount
         {
+            // Profile
             private long _ownerId;
             public long OwnerId { get { return _ownerId; } }
-
             public SortedSet<long> ConstructsServiced = new SortedSet<long>();
 
-            public int RechargingBalance;
-            public int PowerBalance;
-            public int PastDueBalance;
+            // Statistics
+            public float PowerDrawn { get; set; }
+
+            // Balances
+            public float RechargingBalance { get; set; }
+            public float PowerBalance { get; set; }
             
+            private float _totalBalance;
+            public float TotalBalance { get { return RechargingBalance + PowerBalance; } set { _totalBalance = value; } }
+            
+            public float PastDueBalance { get; set; }
+
+            // Policy
             public bool AgendaInsured = false;
 
             //public DateTime TCreated = DateTime.UtcNow;
@@ -40,6 +49,15 @@ namespace IngameScript
             public DGGFiAccount(long OwnerId)
             {
                 _ownerId = OwnerId;
+                PowerDrawn = 0;
+                RechargingBalance = 0;
+                PowerBalance = 0;
+                PastDueBalance = 0;
+            }
+
+            public void RegisterConstruct(IMyCubeGrid grid)
+            {
+                ConstructsServiced.Add(grid.EntityId);
             }
         }
 
